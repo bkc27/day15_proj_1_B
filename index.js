@@ -32,7 +32,7 @@ app.get("/api/students", async (req, res) => {
     try {
         const students = await Student.find();
         res.json({
-            message:"All Records",
+            message: "All Records",
             data: students
         });
     }
@@ -41,27 +41,43 @@ app.get("/api/students", async (req, res) => {
     }
 });
 
-app.put("/api/students/:id",async(req,res)=>{
-    try{
+app.put("/api/students/:id", async (req, res) => {
+    try {
         // const id = req.params.id;
-        const {id} = req.params;
-        const student = await Student.findByIdAndUpdate(id,req.body);
-        if(!student){
+        const { id } = req.params;
+        const student = await Student.findByIdAndUpdate(id, req.body);
+        if (!student) {
             return res.status(401).json({
-                success:false,
-                message:"Student Not Found"
+                success: false,
+                message: "Student Not Found"
             })
         }
         res.json({
-            message:"Records Updated"
+            message: "Records Updated"
         })
     }
-    catch(err){
-        console.log("Unable to UPdate ",err);
+    catch (err) {
+        console.log("Unable to UPdate ", err);
     }
 });
 
-
+app.delete("/api/students/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const student = await Student.findByIdAndDelete(id);
+        if(!student){
+            return res.status(401).json({
+                message:"Invalid Student ID"
+            });
+        }
+        res.json({
+            message:"Record Deleted"
+        });
+    }
+    catch (err) {
+        console.log("Unable to Delete", err);
+    }
+});
 
 
 const PORT = process.env.PORT || 5001;
